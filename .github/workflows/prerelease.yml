@@ -1,0 +1,30 @@
+name: Set up a new Release Candidate
+
+on:
+  workflow_dispatch:
+    inputs:
+      commitId:
+        description: "Commit Id"
+        default: ""
+        required: true
+        type: string
+
+jobs:
+  setupRcBranch:
+    name: Set up a Release Candidate Branch
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Sync code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.commitId }}
+
+
+      - name: Create Release Candidate Branch
+        id: release-branch
+        env:
+          RELEASE_VERSION: 100.100.100
+        run: |
+          $branch = "release/candidate/$env:RELEASE_VERSION"
+          git checkout -b $branch
