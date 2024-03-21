@@ -13,14 +13,11 @@ jobs:
   setupRcBranch:
     name: Set up a Release Candidate Branch
     runs-on: ubuntu-latest
-
     steps:
       - name: Sync code
         uses: actions/checkout@v4
         with:
           ref: ${{ inputs.commitId }}
-
-
       - name: Create Release Candidate Branch
         id: release-branch
         env:
