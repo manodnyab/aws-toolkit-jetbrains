@@ -10,9 +10,13 @@ on:
         type: string
 
 jobs:
+
   setupRcBranch:
     name: Set up a Release Candidate Branch
     runs-on: ubuntu-latest
+    env:
+      RELEASE_VERSION: 100.100.100
+      releaseBranch: "release/candidate/100.100.100"
     steps:
       - name: Sync code
         uses: actions/checkout@v4
@@ -20,8 +24,8 @@ jobs:
           ref: ${{ inputs.commitId }}
       - name: Create Release Candidate Branch
         id: release-branch
-        env:
-          RELEASE_VERSION: 100.100.100
+
         run: |
-          $branch = "release/candidate/$env:RELEASE_VERSION"
-          git checkout -b $branch
+          git checkout -b $releaseBranch
+      - name: Push new branch
+        run: git push --set-upstream origin $releaseBranch
