@@ -10,6 +10,22 @@ on:
         type: string
 
 jobs:
+  checkIfBranchExists:
+    name: Check if a release candidate branch exists
+    runs-on: ubuntu-latest
+    env:
+      releaseBranch: "release/candidate/100.100.100"
+    steps:
+      - name: Check branch
+        id: release-branch
+        run: |
+          git branch -r | grep -q "origin/$releaseBranch"
+          if [ $? -eq 0 ]; then
+            echo "Release Candidate Branch exists"
+            exit 1
+          fi
+          echo "Release Candidate Branch does not exist"
+          exit 0
 
   setupRcBranch:
     name: Set up a Release Candidate Branch
@@ -22,10 +38,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ inputs.commitId }}
-      - name: Create Release Candidate Branch
-        id: release-branch
-
+        if: steps.release-branch.outputs.exitCode == 0
         run: |
           git checkout -b $releaseBranch
-      - name: Push new branch
-        run: git push --set-upstream origin $releaseBranch
+          git push --set-upstream origin $releaseBranch
+
