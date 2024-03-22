@@ -16,6 +16,10 @@ jobs:
     env:
       releaseBranch: "release/candidate/100.100.100"
     steps:
+      - name: Sync code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.commitId }}
       - name: Check branch
         id: release-branch
         run: |
@@ -34,11 +38,6 @@ jobs:
       RELEASE_VERSION: 100.100.100
       releaseBranch: "release/candidate/100.100.100"
     steps:
-      - name: Sync code
-        if: steps.release-branch.outputs.exitCode == 0
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.commitId }}
       - name: Set up release candidate branch
         if: steps.release-branch.outputs.exitCode == 0
         run: |
