@@ -14,24 +14,23 @@ jobs:
     name: Check if a release candidate branch exists
     runs-on: ubuntu-latest
     env:
-      releaseBranch: "release/candidate/100.100.101"
+      releaseBranch: "release/candidate/100.100.100"
     steps:
       - name: Sync code
         uses: actions/checkout@v4
         with:
           ref: ${{ inputs.commitId }}
-      - name: Check branch
+      - name: Check if release candidate branch exists
         id: release-branch
         run: |
-          git branch -r | grep -q "origin/$releaseBranch"
-          if [ $? -eq 0 ]; then
+          if git ls-remote --heads origin $releaseBranch; then
             echo "Release Candidate Branch exists"
             exit 1
           fi
           echo "Release Candidate Branch does not exist"
-          exit 0
+           # exit 0
+
       - name: Set up release candidate branch
-        if: steps.release-branch.outputs.exitCode == 0
         run: |
           git checkout -b $releaseBranch
           git push --set-upstream origin $releaseBranch
