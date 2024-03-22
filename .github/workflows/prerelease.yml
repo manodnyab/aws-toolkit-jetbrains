@@ -35,9 +35,11 @@ jobs:
       releaseBranch: "release/candidate/100.100.100"
     steps:
       - name: Sync code
+        if: steps.release-branch.outputs.exitCode == 0
         uses: actions/checkout@v4
         with:
           ref: ${{ inputs.commitId }}
+      - name: Set up release candidate branch
         if: steps.release-branch.outputs.exitCode == 0
         run: |
           git checkout -b $releaseBranch
