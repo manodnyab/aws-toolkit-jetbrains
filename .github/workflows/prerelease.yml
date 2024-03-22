@@ -30,14 +30,6 @@ jobs:
           fi
           echo "Release Candidate Branch does not exist"
           exit 0
-
-  setupRcBranch:
-    name: Set up a Release Candidate Branch
-    runs-on: ubuntu-latest
-    env:
-      RELEASE_VERSION: 100.100.100
-      releaseBranch: "release/candidate/100.100.100"
-    steps:
       - name: Set up release candidate branch
         if: steps.release-branch.outputs.exitCode == 0
         run: |
