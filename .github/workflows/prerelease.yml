@@ -20,17 +20,18 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ inputs.commitId }}
-      - name: Check if release candidate branch exists
-        id: release-branch
-        run: |
-          $EXISTS = git ls-remote --heads origin $releaseBranch
-          echo "EXISTS=$EXISTS" >> $GITHUB_ENV
-          echo $EXISTS
 
-      - name: Set up release candidate branch
-        if: $EXISTS == false
-        id: setup-branch
+      - name: Check if remote branch exists
         run: |
-          git checkout -b $releaseBranch
-          git push --set-upstream origin $releaseBranch
+          if git ls-remote --exit-code --heads origin $releaseBranch; then
+            echo "Remote branch exists"
+          else
+            echo "Remote branch does not exist"
+          fi
+
+    #  - name: Set up release candidate branch
+    #    id: setup-branch
+    #    run: |
+    #      git checkout -b $releaseBranch
+    #      git push --set-upstream origin $releaseBranch
 
