@@ -24,14 +24,17 @@ jobs:
       - name: Check if remote branch exists
         run: |
           if git ls-remote --exit-code --heads origin $releaseBranch; then
+            echo "EXISTS=true" >> $GITHUB_ENV
             echo "Remote branch exists"
           else
+            echo "EXISTS=false" >> $GITHUB_ENV
             echo "Remote branch does not exist"
           fi
 
-    #  - name: Set up release candidate branch
-    #    id: setup-branch
-    #    run: |
-    #      git checkout -b $releaseBranch
-    #      git push --set-upstream origin $releaseBranch
+      - name: Set up release candidate branch
+        id: setup-branch
+        if: ${{ env.EXISTS == 'false' }}
+        run: |
+          git checkout -b $releaseBranch
+          git push --set-upstream origin $releaseBranch
 
