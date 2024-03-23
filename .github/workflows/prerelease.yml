@@ -23,7 +23,7 @@ jobs:
 
       - name: Check if remote branch exists
         run: |
-          if git ls-remote --exit-code --heads origin $releaseBranch; then
+          if git ls-remote --exit-code --heads origin $releaseBranchPattern; then
             echo "EXISTS=true" >> $GITHUB_ENV
             echo "Remote branch exists"
           else
