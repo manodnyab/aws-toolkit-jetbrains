@@ -8,6 +8,11 @@ on:
         default: ""
         required: true
         type: string
+      versionNumber:
+        description: "Version number/name"
+        default: ""
+        required: true
+        type: string
 
 jobs:
   checkIfBranchExists:
@@ -25,16 +30,17 @@ jobs:
         run: |
           if git ls-remote --exit-code --heads origin $releaseBranchPattern; then
             echo "EXISTS=true" >> $GITHUB_ENV
-            echo "Remote branch exists"
+            echo "Release candidate branch already exists"
+            exit 1
           else
             echo "EXISTS=false" >> $GITHUB_ENV
-            echo "Remote branch does not exist"
+            echo "Release candidate branch does not exist"
           fi
 
       - name: Set up release candidate branch
         id: setup-branch
         env:
-          releaseBranch: "release/candidate/100.100.102"
+          releaseBranch: "release/candidate/${{inputs.versionNumber}}"
         if: ${{ env.EXISTS == 'false' }}
         run: |
           git checkout -b $releaseBranch
