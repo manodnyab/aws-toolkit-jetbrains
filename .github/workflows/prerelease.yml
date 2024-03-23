@@ -31,10 +31,12 @@ jobs:
             echo "Remote branch does not exist"
           fi
 
-  #    - name: Set up release candidate branch
-  #      id: setup-branch
-  #      if: ${{ env.EXISTS == 'false' }}
-  #      run: |
-  #        git checkout -b $releaseBranch
-  #        git push --set-upstream origin $releaseBranch
+      - name: Set up release candidate branch
+        id: setup-branch
+        env:
+          releaseBranch: "release/candidate/100.100.102"
+        if: ${{ env.EXISTS == 'false' }}
+        run: |
+          git checkout -b $releaseBranch
+          git push --set-upstream origin $releaseBranch
 
