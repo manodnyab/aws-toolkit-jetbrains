@@ -15,8 +15,8 @@ on:
         type: string
 
 jobs:
-  checkIfBranchExists:
-    name: Check if a release candidate branch exists
+  setupReleaseCandidateBranch:
+    name: Setup a release candidate branch
     runs-on: ubuntu-latest
     env:
       releaseBranchPattern: "release/candidate/*"
@@ -37,8 +37,7 @@ jobs:
             echo "Release candidate branch does not exist"
           fi
 
-      - name: Set up release candidate branch
-        id: setup-branch
+      - name: Set up release branch
         env:
           releaseBranch: "release/candidate/${{inputs.versionNumber}}"
         if: ${{ env.EXISTS == 'false' }}
