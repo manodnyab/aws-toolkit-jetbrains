@@ -1,0 +1,28 @@
+name: Prerelease
+on:
+  # schedule:
+  #     - cron: '5 5 * * *'
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag name for release'
+        required: false
+        default: prerelease
+  push:
+    branches: [manodnyb/addActionForPrerelease2]
+    # tags:
+    #   - v[0-9]+.[0-9]+.[0-9]+
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Generate artifact
+        run: |
+          ./gradlew -PideProfileName=$ALTERNATIVE_IDE_PROFILE_NAME :plugin-toolkit:intellij:buildPlugin
+     
+  
