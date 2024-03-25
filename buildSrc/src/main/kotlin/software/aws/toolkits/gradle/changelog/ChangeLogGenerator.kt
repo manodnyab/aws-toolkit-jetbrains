@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter
 class ChangeLogGenerator(private val writers: List<ChangeLogWriter>, private val logger: Logger) : AutoCloseable {
     fun addUnreleasedChanges(unreleasedFiles: List<Path>) {
         val entries = unreleasedFiles.parallelStream()
-            .map { readFile<Entry>(it.toFile()) }
+            .map { it1 -> readFile<Entry>(it1.toFile()) }
             .toList().filterNotNull()
         val unreleasedEntry = ReleaseEntry(LocalDate.now(), "Pending Release", entries)
         logger.info("Adding unreleased entry: $unreleasedEntry")
