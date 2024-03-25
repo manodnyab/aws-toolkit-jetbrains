@@ -25,6 +25,6 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
       - name: Generate artifact
         run: |
-          ./gradlew -PideProfileName=$ALTERNATIVE_IDE_PROFILE_NAME :plugin-toolkit:intellij:buildPlugin
+          ./gradlew -PideProfileName=2023.3 :plugin-toolkit:intellij:buildPlugin
      
   
