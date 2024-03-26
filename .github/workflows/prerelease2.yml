@@ -38,10 +38,19 @@ jobs:
           name: plugin-toolkit
           path: ./plugins/toolkit/intellij/build/distributions/*.zip
           retention-days: 1
+  publish:
+    needs: [package]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
-        with:
-          name: plugin-toolkit
-      - name: Display structure of downloaded files
-        run: ls -R
+      - name: Publish to GitHub Releases
+        run: |
+          gh release create v100.100.100 --draft --notes "Release notes" --title "Release title" --target $GITHUB_SHA plugin-toolkit/*.zip
+
+
      
   
