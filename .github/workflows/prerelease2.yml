@@ -27,7 +27,8 @@ jobs:
           java-version: '17'
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '6'
+          dotnet-version: '6.x'
+          cache: true
 
       - name: Generate artifact
         run: |
