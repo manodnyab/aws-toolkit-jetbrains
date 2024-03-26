@@ -31,6 +31,6 @@ jobs:
 
       - name: Generate artifact
         run: |
-          ./gradlew -PideProfileName=2023.3 :plugin-toolkit:intellij:buildPlugin
+          ./gradlew -PideProfileName=2023.3 :plugin-toolkit:intellij:buildPlugin -PrunIdeVariant=IC
      
   
