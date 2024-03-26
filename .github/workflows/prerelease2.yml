@@ -25,6 +25,9 @@ jobs:
         with:
           distribution: 'corretto'
           java-version: '17'
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '6'
 
       - name: Generate artifact
         run: |
