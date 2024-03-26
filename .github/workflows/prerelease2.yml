@@ -37,5 +37,11 @@ jobs:
         with:
           name: plugin-toolkit
           path: ./plugins/toolkit/intellij/build/distributions/*.zip
+          retention-days: 1
+      - uses: actions/download-artifact@v4
+        with:
+          name: plugin-toolkit
+      - name: Display structure of downloaded files
+        run: ls -R
      
   
