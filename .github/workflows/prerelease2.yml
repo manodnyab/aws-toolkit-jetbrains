@@ -40,6 +40,9 @@ jobs:
           retention-days: 1
   publish:
     needs: [package]
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_REPO: ${{ github.repository }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
