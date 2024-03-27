@@ -15,7 +15,7 @@ jobs:
   generate_artifact_1:
     strategy:
       matrix:
-        supported_versions: [ '2022.3', '2023.2', '2023.1' ]
+        supported_versions: [ '2023.3', '2023.2', '2023.1' ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
