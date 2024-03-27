@@ -34,7 +34,7 @@ jobs:
       - name:  Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: plugin-toolkit
+          name: plugin-toolkit-${{ matrix.supported_versions }}
           path: ./plugins/toolkit/intellij/build/distributions/*.zip
           retention-days: 1
 
