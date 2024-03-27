@@ -31,20 +31,13 @@ jobs:
       - name: Generate artifact
         run: |
           ./gradlew -PideProfileName=${{ matrix.supported_versions }} :plugin-toolkit:intellij:buildPlugin --exclude-task buildResharperPlugin
-     
-
-
-  upload_artifact:
-    runs-on: ubuntu-latest
-    needs: [generate_artifact_1]
-    steps:
-      - uses: actions/checkout@v4
       - name:  Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: plugin-toolkit
           path: ./plugins/toolkit/intellij/build/distributions/*.zip
           retention-days: 1
+
 
   #publish:
   #  needs: [upload_artifact]
