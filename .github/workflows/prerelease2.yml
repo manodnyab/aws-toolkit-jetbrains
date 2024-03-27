@@ -57,11 +57,11 @@ jobs:
       - if: github.event_name == 'workflow_dispatch'
         run: |
           echo "TAG_NAME=${{ github.event.inputs.tag_name }}" >> $GITHUB_ENV
-        #run: echo "TAG_NAME=${{ github.event.inputs.tag_name }}" >> $GITHUB_ENV
+
       - if: github.ref_name != 'main'
         run: |
           TAG_NAME=${{ github.ref_name }}
-        # change to feature later
+          # change to feature later
           FEAT_NAME=$(echo $TAG_NAME | sed 's/manodnyb\///')
           echo "FEAT_NAME=$FEAT_NAME" >> $GITHUB_ENV
           echo "TAG_NAME=pre-$FEAT_NAME" >> $GITHUB_ENV
