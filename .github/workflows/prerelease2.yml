@@ -32,6 +32,9 @@ jobs:
       - name: Generate artifact
         run: |
           ./gradlew -PideProfileName=2023.3 :plugin-toolkit:intellij:buildPlugin --exclude-task buildResharperPlugin
+      - name: Generate artifact
+        run: |
+          ./gradlew -PideProfileName=2023.2 :plugin-toolkit:intellij:buildPlugin --exclude-task buildResharperPlugin
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
