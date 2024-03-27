@@ -30,13 +30,14 @@ jobs:
           dotnet-version: '6.x'
       - name: Generate artifact
         run: |
-          ./gradlew -PideProfileName=${{ matrix.supported_versions }} :plugin-toolkit:intellij:buildPlugin --exclude-task buildResharperPlugin
+        #  ./gradlew -PideProfileName=${{ matrix.supported_versions }} :plugin-toolkit:intellij:buildPlugin --exclude-task buildResharperPlugin
       - name:  Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: plugin-toolkit-${{ matrix.supported_versions }}
           path: ./plugins/toolkit/intellij/build/distributions/*.zip
           retention-days: 1
+
   generate_changelog:
     runs-on: ubuntu-latest
     outputs:
@@ -52,7 +53,29 @@ jobs:
         with:
           distribution: 'corretto'
           java-version: '17'
-     
+
+      - if: github.event_name == 'workflow_dispatch'
+        run: echo "TAG_NAME=${{ github.event.inputs.tag_name }}" >> $GITHUB_ENV
+      - if: github.ref_name != 'main'
+        run: |
+            TAG_NAME=${{ github.ref_name }}
+          # change to feature later
+            FEAT_NAME=$(echo $TAG_NAME | sed 's/manodnyb\///')
+            echo "FEAT_NAME=$FEAT_NAME" >> $GITHUB_ENV
+            echo "TAG_NAME=pre-$FEAT_NAME" >> $GITHUB_ENV
+      - if: github.ref_name == 'main'
+        run: |
+            echo "FEAT_NAME=" >> $GITHUB_ENV
+            echo "TAG_NAME=prerelease" >> $GITHUB_ENV
+      - name: Generate changelog
+        id: changelog
+        run: |
+          ./gradlew -PideProfileName=2023.3 :plugin-toolkit:intellij:generateChangelog
+      - name: Provide the metadata to output
+        run: |
+            echo "feature=$FEAT_NAME" >> $GITHUB_OUTPUT
+            echo "tagname=$TAG_NAME" >> $GITHUB_OUTPUT
+         
       
 
 
