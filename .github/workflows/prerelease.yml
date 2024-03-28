@@ -78,7 +78,7 @@ jobs:
           echo "feature=$FEAT_NAME" >> $GITHUB_OUTPUT
           echo "tagname=$TAG_NAME" >> $GITHUB_OUTPUT
           echo 'changes<<EOF' >> $GITHUB_OUTPUT
-          cat CHANGELOG.md | perl -ne 'BEGIN{$/="\n\n"} print; exit if $. == 2' >> $GITHUB_OUTPUT
+          cat CHANGELOG.md | perl -ne 'BEGIN{$/="\n\n"} print; exit if $. == 1' >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
       - name: Get changelog output
         run: |
