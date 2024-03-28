@@ -71,7 +71,8 @@ jobs:
       - name: Generate changelog
         id: changelog
         run: |
-          ./gradlew createRelease
+          ./gradlew generateChangelog
+          ./gradlew generateChangelog
       - name: Provide the metadata to output
         id: read_changelog
         run: |
