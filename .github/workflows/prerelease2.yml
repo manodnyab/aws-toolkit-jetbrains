@@ -47,7 +47,7 @@ jobs:
       changes: ${{ steps.build.outputs.changes }}
     steps:
       - uses: actions/checkout@v4
-        
+
       - uses: actions/setup-java@v4
         with:
           distribution: 'corretto'
@@ -83,6 +83,7 @@ jobs:
       - name: Get changelog output
         run: |
             echo "${{ steps.read_changelog.outputs.changes }}"
+          
          
       
 
