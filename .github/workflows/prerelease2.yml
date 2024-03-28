@@ -47,8 +47,7 @@ jobs:
       changes: ${{ steps.build.outputs.changes }}
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: $GITHUB_SHA
+        
       - uses: actions/setup-java@v4
         with:
           distribution: 'corretto'
