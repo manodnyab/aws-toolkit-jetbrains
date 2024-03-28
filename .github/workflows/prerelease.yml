@@ -72,7 +72,7 @@ jobs:
         id: changelog
         run: |
           ./gradlew generateChangelog
-          ./gradlew generateChangelog
+
       - name: Provide the metadata to output
         id: read_changelog
         run: |
