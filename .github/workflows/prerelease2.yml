@@ -31,12 +31,12 @@ jobs:
       - name: Generate artifact
         run: |
         #  ./gradlew -PideProfileName=${{ matrix.supported_versions }} :plugin-toolkit:intellij:buildPlugin --exclude-task buildResharperPlugin
-      - name:  Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: plugin-toolkit-${{ matrix.supported_versions }}
-          path: ./plugins/toolkit/intellij/build/distributions/*.zip
-          retention-days: 1
+      #- name:  Upload artifact
+      #  uses: actions/upload-artifact@v4
+      #  with:
+      #    name: plugin-toolkit-${{ matrix.supported_versions }}
+      #    path: ./plugins/toolkit/intellij/build/distributions/*.zip
+      #    retention-days: 1
 
   generate_changelog:
     runs-on: ubuntu-latest
@@ -74,10 +74,16 @@ jobs:
         run: |
           ./gradlew generateChangelog
       - name: Provide the metadata to output
+        id: read_changelog
         run: |
-        
           echo "feature=$FEAT_NAME" >> $GITHUB_OUTPUT
           echo "tagname=$TAG_NAME" >> $GITHUB_OUTPUT
+          echo 'changes<<EOF' >> $GITHUB_OUTPUT
+          cat CHANGELOG.md | perl -ne 'BEGIN{$/="\n\n"} print; exit if $. == 2' >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+      - name: Get changelog output
+        run: |
+            echo "${{ steps.read_changelog.outputs.changes }}"
          
       
 
