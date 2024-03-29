@@ -11,7 +11,6 @@ on:
 
 
 jobs:
-
   generate_artifact:
     strategy:
       matrix:
@@ -30,21 +29,21 @@ jobs:
           dotnet-version: '6.x'
       - name: Generate artifact
         run: |
-        #  ./gradlew -PideProfileName=${{ matrix.supported_versions }} :plugin-toolkit:intellij:buildPlugin --exclude-task buildResharperPlugin
-      #- name:  Upload artifact
-      #  uses: actions/upload-artifact@v4
-      #  with:
-      #    name: plugin-toolkit-${{ matrix.supported_versions }}
-      #    path: ./plugins/toolkit/intellij/build/distributions/*.zip
-      #    retention-days: 1
+          ./gradlew -PideProfileName=${{ matrix.supported_versions }} :plugin-toolkit:intellij:buildPlugin --exclude-task buildResharperPlugin
+      - name:  Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: plugin-toolkit-${{ matrix.supported_versions }}
+          path: ./plugins/toolkit/intellij/build/distributions/*.zip
+          retention-days: 1
 
   generate_changelog:
     runs-on: ubuntu-latest
     outputs:
-      feature: ${{ steps.build.outputs.feature }}
-      tagname: ${{ steps.build.outputs.tagname }}
-      version: ${{ steps.build.outputs.version }}
-      changes: ${{ steps.build.outputs.changes }}
+      feature: ${{ steps.assign_output.outputs.feature }}
+      tagname: ${{ steps.assign_output.outputs.tagname }}
+      version: ${{ steps.assign_output.outputs.version }}
+      changes: ${{ steps.assign_output.outputs.changes }}
     steps:
       - uses: actions/checkout@v4
 
@@ -71,41 +70,44 @@ jobs:
       - name: Generate changelog
         id: changelog
         run: |
-          #./gradlew :createRelease :generateChangelog
+          ./gradlew :createRelease :generateChangelog
 
       - name: Provide the metadata to output
-        id: read_changelog
+        id: assign_output
         run: |
           echo "feature=$FEAT_NAME" >> $GITHUB_OUTPUT
           echo "tagname=$TAG_NAME" >> $GITHUB_OUTPUT
+          echo "version=$(cat gradle.properties | grep toolkitVersion | cut -d'=' -f2)" >> $GITHUB_OUTPUT
           echo 'changes<<EOF' >> $GITHUB_OUTPUT
           cat CHANGELOG.md | perl -ne 'BEGIN{$/="\n\n"} print; exit if $. == 1' >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
-      - name: Get version number
 
+  publish:
+    needs: [generate_artifact, generate_changelog]
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_REPO: ${{ github.repository }}
+      FEAT_NAME: ${{ needs.generate_changelog.outputs.feature }}
+      TAG_NAME: ${{ needs.generate_changelog.outputs.tagname }}
+      AWS_TOOLKIT_VERSION: ${{ needs.generate_changelog.outputs.version }}
+      BRANCH: ${{ github.ref_name }}
+      AWS_TOOLKIT_CHANGES: ${{ needs.generate_changelog.outputs.changes }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        name: Delete existing prerelease
+          # "prerelease" (main branch) or "pre-<feature>"
+        if: "env.TAG_NAME == 'prerelease' || startsWith(env.TAG_NAME, 'pre-')"
         run: |
-          echo "version=$(cat gradle.properties | grep toolkitVersion | cut -d'=' -f2)"
-          #echo "${{ steps.read_changelog.outputs.changes }}"
-      
-      
-      
-      
-
-      #publish:
-      #  needs: [upload_artifact]
-      #  env:
-      #    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #    GH_REPO: ${{ github.repository }}
-      #  runs-on: ubuntu-latest
-      #  permissions:
-      #    contents: write
-
-      #  steps:
-      #    - uses: actions/checkout@v4
-      #    - uses: actions/download-artifact@v4
-      #    - name: Publish to GitHub Releases
-      #      run: |
-      #        gh release create v100.100.100 --draft --notes "Release notes" --title "Release title" --target $GITHUB_SHA plugin-toolkit/*.zip
+          echo "SUBJECT=AWS Toolkit ${AWS_TOOLKIT_VERSION}: ${FEAT_NAME:-${TAG_NAME}}" >> $GITHUB_ENV
+          gh release delete "$TAG_NAME" --cleanup-tag --yes || true
+      - name: Publish to GitHub Releases
+        run: |
+          envsubst < "$GITHUB_WORKSPACE/.github/workflows/prerelease_notes.md" > "$RUNNER_TEMP/prerelease_notes.md"
+          gh release create $TAG_NAME --draft --prerelease --notes-file "$RUNNER_TEMP/prerelease_notes.md" --title $SUBJECT --target $GITHUB_SHA plugin-toolkit/*.zip
 
 
 
