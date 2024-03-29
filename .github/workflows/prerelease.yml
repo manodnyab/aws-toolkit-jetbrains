@@ -84,7 +84,7 @@ jobs:
       - name: Get version number
 
         run: |
-          echo "version=$(cat gradle.properties | grep toolkitVersion | cut -d'=' -f2)
+          echo "version=$(cat gradle.properties | grep toolkitVersion | cut -d'=' -f2)"
           #echo "${{ steps.read_changelog.outputs.changes }}"
       
       
