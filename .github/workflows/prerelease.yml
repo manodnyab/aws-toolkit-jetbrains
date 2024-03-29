@@ -82,12 +82,10 @@ jobs:
           cat CHANGELOG.md | perl -ne 'BEGIN{$/="\n\n"} print; exit if $. == 1' >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
       - name: Get version number
-        env:
-          defaultVersion: '100.100.100'
+
         run: |
-          cat gradle.properties | grep toolkitVersion | cut -d'=' -f2 >> defaultVersion
-          echo $defaultVersion
-          # echo "${{ steps.read_changelog.outputs.changes }}"
+          echo "version=$(cat gradle.properties | grep toolkitVersion | cut -d'=' -f2)
+          #echo "${{ steps.read_changelog.outputs.changes }}"
       
       
       
