@@ -71,7 +71,7 @@ jobs:
       - name: Generate changelog
         id: changelog
         run: |
-          ./gradlew :createRelease :generateChangelog
+          #./gradlew :createRelease :generateChangelog
 
       - name: Provide the metadata to output
         id: read_changelog
@@ -81,9 +81,13 @@ jobs:
           echo 'changes<<EOF' >> $GITHUB_OUTPUT
           cat CHANGELOG.md | perl -ne 'BEGIN{$/="\n\n"} print; exit if $. == 1' >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
-      - name: Get changelog output
+      - name: Get version number
+        env:
+          defaultVersion: '100.100.100'
         run: |
-          echo "${{ steps.read_changelog.outputs.changes }}"
+          cat gradle.properties | grep toolkitVersion | cut -d'=' -f2 >> defaultVersion
+          echo $defaultVersion
+          # echo "${{ steps.read_changelog.outputs.changes }}"
       
       
       
