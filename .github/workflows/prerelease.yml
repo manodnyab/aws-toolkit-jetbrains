@@ -107,7 +107,7 @@ jobs:
       - name: Publish to GitHub Releases
         run: |
           envsubst < "$GITHUB_WORKSPACE/.github/workflows/prerelease_notes.md" > "$RUNNER_TEMP/prerelease_notes.md"
-          gh release create $TAG_NAME --draft --prerelease --notes-file "$RUNNER_TEMP/prerelease_notes.md" --title $SUBJECT --target $GITHUB_SHA plugin-toolkit/*.zip
+          gh release create $TAG_NAME --draft --prerelease --notes-file "$RUNNER_TEMP/prerelease_notes.md" --title "$SUBJECT" --target $GITHUB_SHA plugin-toolkit/*.zip
 
 
 

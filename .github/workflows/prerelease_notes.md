@@ -9,7 +9,3 @@ _This is an **unsupported preview build** of the `${BRANCH}` branch of AWS Toolk
 # Changes
 
 ${AWS_TOOLKIT_CHANGES}
-
-## Previous changes
-
--   See [CHANGELOG.md](CHANGELOG.md)
