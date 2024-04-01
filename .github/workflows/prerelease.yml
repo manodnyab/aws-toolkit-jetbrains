@@ -27,20 +27,16 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '6.x'
-      - name: Clear disk space
-        run: |
-          echo $(df -h)
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf /opt/ghc
-          sudo rm -rf "/usr/local/share/boost"
-          #sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+
       - name: Generate artifact
         run: |
           ./gradlew -PideProfileName=2023.3 :plugin-toolkit:intellij:buildPlugin
-          abc = $?
-          if  [ $abc -ne 0 ]; then
-            echo "Build failed"
+          
           #./gradlew -PideProfileName=${{ matrix.supported_versions }} :plugin-toolkit:intellij:buildPlugin
+      - name: Clear disk space
+        run: |
+          echo $(df -h)
+          
 #      - name:  Upload artifact
 #        uses: actions/upload-artifact@v4
 #        with:
