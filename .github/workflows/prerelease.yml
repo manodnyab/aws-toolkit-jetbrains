@@ -37,6 +37,9 @@ jobs:
       - name: Generate artifact
         run: |
           ./gradlew -PideProfileName=2023.3 :plugin-toolkit:intellij:buildPlugin
+          abc = $?
+          if  [ $abc -ne 0 ]; then
+            echo "Build failed"
           #./gradlew -PideProfileName=${{ matrix.supported_versions }} :plugin-toolkit:intellij:buildPlugin
 #      - name:  Upload artifact
 #        uses: actions/upload-artifact@v4
