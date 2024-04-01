@@ -24,9 +24,9 @@ jobs:
         with:
           distribution: 'corretto'
           java-version: '17'
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '6.x'
+      #- uses: actions/setup-dotnet@v4
+      #  with:
+      #    dotnet-version: '6.x'
       - name: Clear disk space
         run: |
           echo $(df -h)
