@@ -12,9 +12,9 @@ on:
 
 jobs:
   generate_artifact:
-    strategy:
-      matrix:
-        supported_versions: [ '2023.3', '2023.2', '2023.1' ]
+    #strategy:
+    #  matrix:
+    #    supported_versions: [ '2023.3', '2023.2', '2023.1' ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -30,13 +30,14 @@ jobs:
       - name: Clear disk space
         run: |
           echo $(df -h)
-          #sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/share/dotnet
           sudo rm -rf /opt/ghc
           sudo rm -rf "/usr/local/share/boost"
           #sudo rm -rf "$AGENT_TOOLSDIRECTORY"
       - name: Generate artifact
         run: |
-          ./gradlew -PideProfileName=${{ matrix.supported_versions }} :plugin-toolkit:intellij:buildPlugin
+          ./gradlew -PideProfileName=2023.3 :plugin-toolkit:intellij:buildPlugin
+          #./gradlew -PideProfileName=${{ matrix.supported_versions }} :plugin-toolkit:intellij:buildPlugin
 #      - name:  Upload artifact
 #        uses: actions/upload-artifact@v4
 #        with:
