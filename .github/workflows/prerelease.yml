@@ -29,7 +29,7 @@ jobs:
           dotnet-version: '6.x'
       - name: Generate artifact
         run: |
-         # ./gradlew -PideProfileName=${{ matrix.supported_versions }} :plugin-toolkit:intellij:buildPlugin --exclude-task buildResharperPlugin
+          ./gradlew -PideProfileName=${{ matrix.supported_versions }} :plugin-toolkit:intellij:buildPlugin --exclude-task buildResharperPlugin
       - name:  Upload artifact
         uses: actions/upload-artifact@v4
         with:
