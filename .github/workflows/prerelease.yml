@@ -12,9 +12,9 @@ on:
 
 jobs:
   generate_artifact_toolkit:
-    strategy:
-      matrix:
-        supported_versions: [ '2023.3', '2023.2', '2023.1' ]
+    #strategy:
+    #  matrix:
+    #    supported_versions: [ '2023.3', '2023.2', '2023.1' ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,7 +29,8 @@ jobs:
           dotnet-version: '6.x'
       - name: Generate artifact
         run: |
-          ./gradlew -PideProfileName=${{ matrix.supported_versions }} :plugin-toolkit:intellij:buildPlugin --exclude-task buildResharperPlugin
+          ./gradlew -PideProfileName=2023.3 :plugin-toolkit:intellij:buildPlugin --exclude-task buildResharperPlugin
+#          ./gradlew -PideProfileName=${{ matrix.supported_versions }} :plugin-toolkit:intellij:buildPlugin --exclude-task buildResharperPlugin
       - name:  Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -38,9 +39,9 @@ jobs:
           retention-days: 1
 
   generate_artifact_q:
-    strategy:
-      matrix:
-        supported_versions: [ '2023.3', '2023.2', '2023.1' ]
+    #strategy:
+    #  matrix:
+    #    supported_versions: [ '2023.3', '2023.2', '2023.1' ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -63,9 +64,9 @@ jobs:
           path: ./plugins/amazonq/build/distributions/*.zip
           retention-days: 1
   generate_artifact_core:
-    strategy:
-      matrix:
-        supported_versions: [ '2023.3', '2023.2', '2023.1' ]
+    #strategy:
+    #  matrix:
+    #    supported_versions: [ '2023.3', '2023.2', '2023.1' ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -80,7 +81,8 @@ jobs:
           dotnet-version: '6.x'
       - name: Generate artifact
         run: |
-          ./gradlew -PideProfileName=${{ matrix.supported_versions }} :plugin-core:buildPlugin --exclude-task buildResharperPlugin
+          ./gradlew -PideProfileName=2023.3 :plugin-core:buildPlugin --exclude-task buildResharperPlugin
+          #./gradlew -PideProfileName=${{ matrix.supported_versions }} :plugin-core:buildPlugin --exclude-task buildResharperPlugin
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -173,5 +175,5 @@ jobs:
 
       - name: Publish to GitHub Releases
         run: |
-          gh release upload $TAG_NAME plugin-core-2023.3/plugin-core.zip #233
+          gh release upload $TAG_NAME plugin-core-2023.3/plugin-core.zip#233
   
