@@ -159,26 +159,31 @@ jobs:
         run: |
           envsubst < "$GITHUB_WORKSPACE/.github/workflows/prerelease_notes.md" > "$RUNNER_TEMP/prerelease_notes.md"
           gh release create $TAG_NAME --draft --prerelease --notes-file "$RUNNER_TEMP/prerelease_notes.md" --title "$SUBJECT" --target $GITHUB_SHA plugin-toolkit-*/*.zip
-
-  publish_core:
-    strategy:
-      matrix:
-        supported_versions: [ '2023.3', '2023.2', '2023.1' ]
-    needs: [publish, generate_changelog]
-    env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      GH_REPO: ${{ github.repository }}
-      TAG_NAME: ${{ needs.generate_changelog.outputs.tagname }}
-
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
-
-      - name: Publish to GitHub Releases
+      - name: Publish core
         run: |
-          gh release upload $TAG_NAME plugin-core-${{ matrix.supported_versions }}/plugin-core.zip#core-${{ matrix.supported_versions }}
-          gh release upload $TAG_NAME plugin-amazonq-${{ matrix.supported_versions }}/plugin-amazonq.zip#amazonq-${{ matrix.supported_versions }}
-  
+          gh release upload $TAG_NAME plugin-core-*/*.zip
+      - name: Publish Q
+        run: |
+          gh release upload $TAG_NAME plugin-amazonq-*/*.zip
+#  publish_core:
+#    strategy:
+#      matrix:
+#        supported_versions: [ '2023.3', '2023.2', '2023.1' ]
+#    needs: [publish, generate_changelog]
+#    env:
+#      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      GH_REPO: ${{ github.repository }}
+#      TAG_NAME: ${{ needs.generate_changelog.outputs.tagname }}
+#
+#    runs-on: ubuntu-latest
+#    permissions:
+#      contents: write
+#    steps:
+#      - uses: actions/checkout@v4
+#      - uses: actions/download-artifact@v4
+#
+#      - name: Publish to GitHub Releases
+#        run: |
+#
+#          gh release upload $TAG_NAME plugin-amazonq-${{ matrix.supported_versions }}/plugin-amazonq.zip#amazonq-${{ matrix.supported_versions }}.zip
+#
