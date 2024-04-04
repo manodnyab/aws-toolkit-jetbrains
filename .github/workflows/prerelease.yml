@@ -34,7 +34,7 @@ jobs:
       - name:  Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: plugin-toolkit-${{ matrix.supported_versions }}
+          name: plugin-toolkit-2023.3 #${{ matrix.supported_versions }}
           path: ./plugins/toolkit/intellij/build/distributions/*.zip
           retention-days: 1
 
@@ -60,7 +60,7 @@ jobs:
       - name:  Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: plugin-amazonq-${{ matrix.supported_versions }}
+          name: plugin-amazonq-2023.3 #${{ matrix.supported_versions }}
           path: ./plugins/amazonq/build/distributions/*.zip
           retention-days: 1
   generate_artifact_core:
@@ -86,7 +86,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: plugin-core-${{ matrix.supported_versions }}
+          name: plugin-core-2023.3 #${{ matrix.supported_versions }}
           path: ./plugins/core/build/distributions/*.zip
           retention-days: 1
   generate_changelog:
