@@ -11,10 +11,11 @@ on:
 
 
 jobs:
+
   generate_artifact_toolkit:
-    #strategy:
-    #  matrix:
-    #    supported_versions: [ '2023.3', '2023.2', '2023.1' ]
+    strategy:
+      matrix:
+        supported_versions: [ '2023.3', '2023.2', '2023.1' ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,19 +30,18 @@ jobs:
           dotnet-version: '6.x'
       - name: Generate artifact
         run: |
-          ./gradlew -PideProfileName=2023.3 :plugin-toolkit:intellij:buildPlugin --exclude-task buildResharperPlugin
-#          ./gradlew -PideProfileName=${{ matrix.supported_versions }} :plugin-toolkit:intellij:buildPlugin --exclude-task buildResharperPlugin
+          ./gradlew -PideProfileName=${{ matrix.supported_versions }} :plugin-toolkit:intellij:buildPlugin --exclude-task buildResharperPlugin
       - name:  Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: plugin-toolkit-2023.3 #${{ matrix.supported_versions }}
+          name: plugin-toolkit-${{ matrix.supported_versions }}
           path: ./plugins/toolkit/intellij/build/distributions/*.zip
           retention-days: 1
 
   generate_artifact_q:
-    #strategy:
-    #  matrix:
-    #    supported_versions: [ '2023.3', '2023.2', '2023.1' ]
+    strategy:
+      matrix:
+        supported_versions: [ '2023.3', '2023.2', '2023.1' ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -56,17 +56,18 @@ jobs:
           dotnet-version: '6.x'
       - name: Generate artifact
         run: |
-         # ./gradlew -PideProfileName=${{ matrix.supported_versions }} :plugin-amazonq:buildPlugin --exclude-task buildResharperPlugin
+          
+          ./gradlew -PideProfileName=${{ matrix.supported_versions }} :plugin-amazonq:buildPlugin --exclude-task buildResharperPlugin
       - name:  Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: plugin-amazonq-2023.3 #${{ matrix.supported_versions }}
+          name: plugin-amazonq-${{ matrix.supported_versions }}
           path: ./plugins/amazonq/build/distributions/*.zip
           retention-days: 1
   generate_artifact_core:
-    #strategy:
-    #  matrix:
-    #    supported_versions: [ '2023.3', '2023.2', '2023.1' ]
+    strategy:
+      matrix:
+        supported_versions: [ '2023.3', '2023.2', '2023.1' ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -81,12 +82,12 @@ jobs:
           dotnet-version: '6.x'
       - name: Generate artifact
         run: |
-          ./gradlew -PideProfileName=2023.3 :plugin-core:buildPlugin --exclude-task buildResharperPlugin
-          #./gradlew -PideProfileName=${{ matrix.supported_versions }} :plugin-core:buildPlugin --exclude-task buildResharperPlugin
+          
+          ./gradlew -PideProfileName=${{ matrix.supported_versions }} :plugin-core:buildPlugin --exclude-task buildResharperPlugin
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: plugin-core-2023.3 #${{ matrix.supported_versions }}
+          name: plugin-core-${{ matrix.supported_versions }}
           path: ./plugins/core/build/distributions/*.zip
           retention-days: 1
   generate_changelog:
@@ -160,6 +161,9 @@ jobs:
           gh release create $TAG_NAME --draft --prerelease --notes-file "$RUNNER_TEMP/prerelease_notes.md" --title "$SUBJECT" --target $GITHUB_SHA plugin-toolkit-*/*.zip
 
   publish_core:
+    strategy:
+      matrix:
+        supported_versions: [ '2023.3', '2023.2', '2023.1' ]
     needs: [publish, generate_changelog]
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -175,5 +179,6 @@ jobs:
 
       - name: Publish to GitHub Releases
         run: |
-          gh release upload $TAG_NAME plugin-core-2023.3/plugin-core.zip#233
+          gh release upload $TAG_NAME plugin-core-${{ matrix.supported_versions }}/plugin-core.zip#core-${{ matrix.supported_versions }}
+          gh release upload $TAG_NAME plugin-amazonq-${{ matrix.supported_versions }}/plugin-amazonq.zip#amazonq-${{ matrix.supported_versions }}
   
