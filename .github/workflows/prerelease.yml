@@ -129,6 +129,7 @@ jobs:
           echo 'changes<<EOF' >> $GITHUB_OUTPUT
           cat CHANGELOG.md | perl -ne 'BEGIN{$/="\n\n"} print; exit if $. == 1' >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
+
   publish:
     needs: [generate_artifact_toolkit, generate_artifact_core, generate_artifact_q, generate_changelog]
     env:
@@ -155,5 +156,22 @@ jobs:
         run: |
           envsubst < "$GITHUB_WORKSPACE/.github/workflows/prerelease_notes.md" > "$RUNNER_TEMP/prerelease_notes.md"
           gh release create $TAG_NAME --draft --prerelease --notes-file "$RUNNER_TEMP/prerelease_notes.md" --title "$SUBJECT" --target $GITHUB_SHA plugin-toolkit-*/*.zip
-          gh release upload $TAG_NAME plugin-core-*/*.zip
 
+  publish_core:
+    needs: [publish, generate_changelog]
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_REPO: ${{ github.repository }}
+      TAG_NAME: ${{ needs.generate_changelog.outputs.tagname }}
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+
+      - name: Publish to GitHub Releases
+        run: |
+          gh release upload $TAG_NAME plugin-core-2023.3/plugin-core.zip #233
+  
