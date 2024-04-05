@@ -21,6 +21,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: remove unwanted dependencies
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf "/usr/local/share/boost"
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+
       - uses: actions/setup-java@v4
         with:
           distribution: 'corretto'
@@ -38,58 +45,58 @@ jobs:
           path: ./plugins/toolkit/intellij/build/distributions/*.zip
           retention-days: 1
 
-  generate_artifact_q:
-    strategy:
-      matrix:
-        supported_versions: [ '2024.1' ]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'corretto'
-          java-version: '17'
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '6.x'
-      - name: Generate artifact
-        run: |
-          
-          ./gradlew -PideProfileName=${{ matrix.supported_versions }} :plugin-amazonq:buildPlugin --exclude-task buildResharperPlugin
-      - name:  Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: plugin-amazonq-${{ matrix.supported_versions }}
-          path: ./plugins/amazonq/build/distributions/*.zip
-          retention-days: 1
-  generate_artifact_core:
-    strategy:
-      matrix:
-        supported_versions: [ '2024.1' ]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'corretto'
-          java-version: '17'
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '6.x'
-      - name: Generate artifact
-        run: |
-          
-          ./gradlew -PideProfileName=${{ matrix.supported_versions }} :plugin-core:buildPlugin --exclude-task buildResharperPlugin
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: plugin-core-${{ matrix.supported_versions }}
-          path: ./plugins/core/build/distributions/*.zip
-          retention-days: 1
+#  generate_artifact_q:
+#    strategy:
+#      matrix:
+#        supported_versions: [ '2024.1' ]
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v4
+#        with:
+#          fetch-depth: 0
+#      - uses: actions/setup-java@v4
+#        with:
+#          distribution: 'corretto'
+#          java-version: '17'
+#      - uses: actions/setup-dotnet@v4
+#        with:
+#          dotnet-version: '6.x'
+#      - name: Generate artifact
+#        run: |
+#
+#          ./gradlew -PideProfileName=${{ matrix.supported_versions }} :plugin-amazonq:buildPlugin --exclude-task buildResharperPlugin
+#      - name:  Upload artifact
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: plugin-amazonq-${{ matrix.supported_versions }}
+#          path: ./plugins/amazonq/build/distributions/*.zip
+#          retention-days: 1
+#  generate_artifact_core:
+#    strategy:
+#      matrix:
+#        supported_versions: [ '2024.1' ]
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v4
+#        with:
+#          fetch-depth: 0
+#      - uses: actions/setup-java@v4
+#        with:
+#          distribution: 'corretto'
+#          java-version: '17'
+#      - uses: actions/setup-dotnet@v4
+#        with:
+#          dotnet-version: '6.x'
+#      - name: Generate artifact
+#        run: |
+#
+#          ./gradlew -PideProfileName=${{ matrix.supported_versions }} :plugin-core:buildPlugin --exclude-task buildResharperPlugin
+#      - name: Upload artifact
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: plugin-core-${{ matrix.supported_versions }}
+#          path: ./plugins/core/build/distributions/*.zip
+#          retention-days: 1
 #  generate_changelog:
 #    runs-on: ubuntu-latest
 #    outputs:
