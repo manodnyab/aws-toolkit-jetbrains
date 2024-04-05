@@ -15,7 +15,7 @@ jobs:
   generate_artifact_toolkit:
     strategy:
       matrix:
-        supported_versions: [ '2023.2','2023.3','2024.1' ]
+        supported_versions: [ '2023.3' ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -37,7 +37,7 @@ jobs:
           dotnet-version: '6.x'
       - name: Generate artifact
         run: |
-          ./gradlew -PideProfileName=${{ matrix.supported_versions }} :plugin-toolkit:intellij:buildPlugin --exclude-task buildResharperPlugin
+          ./gradlew -PideProfileName=${{ matrix.supported_versions }} :plugin-toolkit:intellij:buildPlugin
       - name:  Upload artifact
         uses: actions/upload-artifact@v4
         with:
