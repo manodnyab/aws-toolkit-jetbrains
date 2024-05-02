@@ -1,3 +1,7 @@
+# _3.1_ (2024-05-02)
+- **(Bug Fix)** Amazon Q Chat: Fixed markdown is not getting parsed inside list items.
+- **(Bug Fix)** Amazon Q Chat: Copy to clipboard on code blocks doesn't work
+
 # _3.0_ (2024-04-29)
 - **(Feature)** Amazon Q: Security scans can now run automatically when file changes are made
 - **(Feature)** Amazon Q: Send security issue to chat for explanation and fix
