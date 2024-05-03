@@ -1,3 +1,5 @@
+# _3.2_ (2024-05-03)
+
 # _3.1_ (2024-04-30)
 - **(Bug Fix)** Amazon Q Feature Development: Handle generated code parsing for rendering references correctly
 - **(Bug Fix)** Amazon Q Chat: Copy to clipboard on code blocks doesn't work
