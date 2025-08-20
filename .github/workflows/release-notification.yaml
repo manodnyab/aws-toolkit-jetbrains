@@ -16,16 +16,16 @@ jobs:
             "changelog": ${{ toJSON(github.event.release.body) }}
           }'
       
-#      - name: Send Release Details to Slack
-#        uses: slackapi/slack-github-action@v1.23.0 # Or the latest version of this action
-#        with:
-#          payload: |
-#            {
-#              "version": "${{ github.event.release.tag_name }}",
-#
-#              "release_url": "${{ github.event.release.html_url }}",
-#              "releaseLink": ${{ toJSON(github.event.release.body) }}
-#            }
+      - name: Send Release Details to Slack
+        uses: slackapi/slack-github-action@v1.23.0 # Or the latest version of this action
+        with:
+          payload: |
+            {
+              "version": "${{ github.event.release.tag_name }}",
+
+              "releaseLink": "${{ github.event.release.html_url }}",
+              "changelog": ${{ toJSON(github.event.release.body) }}
+            }
 #            {
 #              "release_name": "${{ github.event.release.name }}",
 #              "tag_name": "${{ github.event.release.tag_name }}",
@@ -36,5 +36,5 @@ jobs:
 #              "repository_url": "${{ github.event.repository.html_url }}",
 #              "release_description": ${{ toJSON(github.event.release.body) }}
 #            }
-#        env:
-#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # Use the secret for the webhook URL
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # Use the secret for the webhook URL
