@@ -7,7 +7,6 @@ on:
 jobs:
   slack_notification:
     runs-on: ubuntu-latest
-    environment: SLACK_WEBHOOK_URL
     steps:
       - name: Print payload
         run: |
@@ -18,15 +17,14 @@ jobs:
           }'
       
       - name: Send Release Details to Slack
-        uses: slackapi/slack-github-action@v1.23.0 # Or the latest version of this action
+        uses: slackapi/slack-github-action@v1.23.0
         with:
-          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
-          webhook-type: webhook-trigger
           payload: |
             {
               "version": "${{ github.event.release.tag_name }}",
-
               "releaseLink": "${{ github.event.release.html_url }}",
               "changelog": ${{ toJSON(github.event.release.body) }}
             }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         
