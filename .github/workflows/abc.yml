@@ -31,43 +31,6 @@ jobs:
 
 
 
-  pp/aws-lsp-codewhisperer-runtimes
-  
-  
-  ip pairing so that the
-  , one per platform.
-  
-  
-  -arm64" "mac-x64" "win-x64")
-
-  "
-  
-  
-  build/archives/shared/clients.zip" "_artifacts/$platform/"
-  build/archives/agent-standalone/$platform/servers.zip" "_artifacts/$platform/"
-  
-  
-  /build/archives/shared/clients.zip" -d _artifacts/clients
-  
-  ad the folder used to
-  ients.zip artifact
-  
-  chives/shared/clients.zip
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
