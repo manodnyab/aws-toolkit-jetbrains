@@ -1,4 +1,4 @@
-name: Create agent-standalone bundles
+name: Create agent-standalone bundle
 
 on:
   push:
